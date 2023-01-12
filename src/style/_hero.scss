@@ -31,6 +31,18 @@
 
   &__man {
     background-image: url('../img/bg-man.jpg');
+
+    @include laptop {
+      background-image: url('../img/bg-laptop-man.jpg');
+    }
+
+    @include tablet {
+      background-image: url('../img/bg-tablet-man.jpg');
+    }
+
+    @include mobile {
+      background-image: url('../img/bg-mobile-man.jpg');
+    }
   }
 
   &__content {
