@@ -1,4 +1,39 @@
+import { TITLE } from "../const";
 import { createElement } from "../createElement";
+
+const container = createElement('div', 
+  {
+    className: "container"
+  }
+);
+
+const content = createElement('div',
+  {
+    className: 'hero__content'
+  },
+  {
+    parent: container
+  }
+);
+
+const titleElem = createElement('h2',
+  {
+    className: "hero__title",
+  },
+  {
+    parent: content
+  }
+);
+
+const heroLink = createElement('a',
+  {
+    className: "hero__link",
+    textContent: 'Перейти'
+  },
+  {
+    parent: content
+  }
+);
 
 export const renderHero = (gender) => {
   const hero = document.querySelector('.hero');
@@ -10,43 +45,9 @@ export const renderHero = (gender) => {
 
   hero.style.display = '';
   hero.className = `hero hero__${gender}`;
+  hero.append(container);
 
-  hero.textContent = '';
+  titleElem.textContent = TITLE[gender].title;
+  heroLink.href = `#/product/${TITLE[gender].id}`;
 
-  const container = createElement('div', 
-    {
-      className: "container"
-    },
-    {
-      parent: hero
-    }
-  );
-
-  createElement('div',
-    {
-      className: 'hero__content',
-      innerHTML: `<h2 class="hero__title">Новая коллекция Бюстгальтер-балконет</h2>`
-    },
-    {
-      parent: container,
-      append: createElement('a',
-        {
-          className: "hero__link",
-          textContent: 'Перейти',
-          href: '#/'
-        }
-      )
-    }
-  );
-
-
-  /*hero.innerHTML = `
-    <div class="container">
-      <div class="hero__content">
-        
-
-        <a class="hero__link" href="#">Перейти</a>
-      </div>
-    </div>
-  `;*/
 };

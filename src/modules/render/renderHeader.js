@@ -33,13 +33,23 @@ export const favoriteLink = createElement('a', {
   href: 'favorite'
 });
 
-const container = createElement('div', {
-  className: 'container header__container',
-  innerHTML: `
-    <a class="header__phone header__link" href="tel:+79304902620">8 930 490 26 20</a>
-    <img class="header__logo" src="${logo}" alt="Логотип Inspired">
-  `
-});
+const container = createElement('div', 
+  {
+    className: 'container header__container',
+    innerHTML: `<a class="header__phone header__link" href="tel:+79304902620">8 930 490 26 20</a>`
+  }
+);
+
+createElement('a',
+  {
+    className: "header__logo",
+    href: '/#',
+    innerHTML: `<img src="${logo}" alt="Логотип Inspired">`
+  },
+  {
+    parent: container
+  }
+);
 
 const nav = createElement('div', 
   {className: 'header__navigation'},
