@@ -2,7 +2,7 @@ import { createElement } from '../createElement';
 import { DATA } from '../const';
 
 export const renderNavigation = (gender) => {
-  console.log('gender: ', gender);
+  
   const navigation = document.querySelector('.navigation');
 
   navigation.textContent= '';
