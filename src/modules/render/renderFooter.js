@@ -25,6 +25,83 @@ export const fbLink = createElement('a',
     }
 );
 
+const createFooterCategory = () => {
+  const footerCategory = createElement('div',
+    {
+      className: 'footer__item footer__item_category footer-category'
+    }
+  );
+
+  createElement('h2',
+    {
+      className: 'footer__title footer-category__title',
+      textContent: 'Каталог'
+    },
+    {
+      parent: footerCategory
+    }
+  );
+
+  const footerCategoryList = createElement('ul',
+    {
+      className: 'footer-category__list'
+    },
+    {
+      parent: footerCategory
+    }
+  );
+
+  for (const key in DATA.navigation) {
+    const footerCategoryItem = createElement('li',
+      {
+        className: 'footer-category__item'
+      },
+      {
+        parent: footerCategoryList,
+        append: createElement('h3',
+          {
+            className: 'footer-category__subtitle'
+          },
+          {
+            append: createElement('a',
+              {
+                className: 'footer__link',
+                href: `#/${key}`,
+                textContent: DATA.navigation[key].title
+              }
+            )
+          }
+        )
+      }
+    );
+
+    createElement('ul',
+      {
+        className: 'footer-category__sublist'
+      },
+      {
+        parent: footerCategoryItem,
+        appends: DATA.navigation[key].list.map((item) => createElement('li',
+          {
+            className: 'footer-category__subitem'
+          },
+          {
+            append: createElement('a',
+              {
+                className: 'footer__link',
+                href: `#/${key}/${item.slug}`,
+                textContent: item.title
+              }
+            )
+          }
+        ))
+      }
+    );
+  }
+
+  return footerCategory;
+};
+
 export const renderFooter = () => {
   const footer = document.querySelector('.footer');
 
@@ -32,84 +109,13 @@ export const renderFooter = () => {
 
   const container = createElement('div',
     {
-      className: 'container'
+      className: 'container footer__container'
     },
     {
-      parent: footer
+      parent: footer,
+      append: createFooterCategory()
     }
   );
-
-  const footerContainer = createElement('div',
-    {
-      className: 'footer__container'
-    },
-    {
-      parent: container
-    }
-  );
-
-  const footerItemCategory = createElement('div',
-    {
-      className: 'footer__item footer__item_category footer-category',
-      innerHTML: `<h2 class="footer__title footer-category__title">Каталог</h2>`
-    },
-    {
-      parent: footerContainer
-    }
-  );
-
-  const footerList = createElement('ul',
-      {
-        className: 'footer-category__list',
-      },
-      {
-        parent: footerItemCategory
-      }
-    );
-
-  for (const genderName in DATA.navigation) {
-
-    const footerItem = createElement('li',
-      {
-        className: 'footer-category__item',
-        innerHTML: `
-          <h3 class="footer-category__subtitle">
-            <a class="footer__link" href="#/${genderName}">${DATA.navigation[genderName].title}</a>
-          </h3>
-        `
-      },
-      {
-        parent: footerList
-      }
-    );
-
-      const subList = createElement('ul',
-        {
-          className: 'footer-category__sublist'
-        },
-        {
-          parent: footerItem
-        }
-      );
-
-    DATA.navigation[genderName].list.map((item) => {
-      createElement('li',
-        {
-          className: 'footer-category__subitem'
-        },
-        {
-          parent: subList,
-          append: createElement('a',
-            {
-              className: 'footer__link',
-              textContent: item.title,
-              href: `#/${genderName}/${item.slug}`
-            }
-          )
-        }
-      );
-    });
-  }
 
   const footerItemSocial = createElement('div',
     {
@@ -120,7 +126,7 @@ export const renderFooter = () => {
       `
     },
     {
-      parent: footerContainer
+      parent: container
     }
   );
 
@@ -160,7 +166,7 @@ export const renderFooter = () => {
       `
     },
     {
-      parent: footerContainer
+      parent: container
     }
   );
 
@@ -170,7 +176,7 @@ export const renderFooter = () => {
       innerHTML: '<p>© INSPIRED, 2023</p>'
     },
     {
-      parent: footerContainer
+      parent: container
     }
   );
 
@@ -189,7 +195,7 @@ export const renderFooter = () => {
       `
     },
     {
-      parent: footerContainer
+      parent: container
     }
   );
 

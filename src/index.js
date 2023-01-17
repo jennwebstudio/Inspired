@@ -9,38 +9,68 @@ import { renderFooter } from './modules/render/renderFooter';
 import { getData } from './modules/getData';
 import { API_URL, DATA } from './modules/const';
 import { createCssColors } from './modules/createCssColors';
+import { createElement } from './modules/createElement';
 
 const init = async () => {
-  DATA.navigation = await getData(`${API_URL}/api/categories`);
-  DATA.colors = await getData(`${API_URL}/api/colors`);
-  createCssColors(DATA.colors);
 
-  router.on('*', () => {
-    renderHeader();
-    renderFooter();
-  });
+  try {
+    router.on('*', () => {
+      renderHeader();
+      renderFooter();
+    });
 
-  router.on('/', () => {
-    mainPage();
-  });
+    DATA.navigation = await getData(`${API_URL}/api/categories`);
+    DATA.colors = await getData(`${API_URL}/api/colors`);
+    createCssColors(DATA.colors);
 
-  router.on('women', () => {
-    mainWomanPage();
-  });
+    router.on('/', () => {
+      mainPage();
+    });
 
-  router.on('men', () => {
-    mainManPage();
-  });
+    router.on('women', () => {
+      mainWomanPage();
+    });
 
-  /*setTimeout( () => {
-    router.navigate('men');
-  }, 3000);
+    router.on('men', () => {
+      mainManPage();
+    });
 
-  setTimeout( () => {
-    router.navigate('women');
-  }, 6000);*/
+    router.on('search', (data) => {
+      console.log(data.params.value);
+      
+    });
 
-  router.resolve();
+    router.on('/:gender/:category', (routerData) => {
+      const { gender, category} = routerData.data;
+      const params = { gender, category};
+      
+    });
+
+    /*setTimeout( () => {
+      router.navigate('men');
+    }, 3000);
+
+    setTimeout( () => {
+      router.navigate('women');
+    }, 6000);*/
+
+  } catch(e) {
+      createElement('h2',
+        {
+          textContent: 'Что-то пошло не так, попробуйте позже...'
+        },
+        {
+          parent: document.querySelector('main'),
+          cb(h2) {
+            h2.style.textAlign = 'center';
+          }
+        }
+      );
+  } finally {
+      router.resolve();
+  }
+
+  
 };
 
 init();
