@@ -1,0 +1,76 @@
+.pagination {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  &__list {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+  }
+
+  &__link {
+    position: relative;
+    display: block;
+    font-size: 14px;
+    line-height: 17px;
+    color: $gray;
+    transition: color .3s ease-in-out;
+
+    &:hover {
+      color: $main-color;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 16px;
+      height: 1px;
+      background-color: $main-color;
+      opacity: 0;
+
+      @include tablet {
+        width: 10px;
+      }
+    }
+
+    &_active {
+      pointer-events: none;
+      color: $main-color;
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    @include tablet {
+      font-size: 10px;
+      line-height: 12px;
+    }
+  }
+
+  &__arrow {
+    width: 24px;
+    height: 24px;
+    background: url('../img/arrow.svg') center no-repeat;
+
+    &_start {
+      order: -1;
+    }
+
+    &_end {
+      transform: rotate(180deg);
+    }
+
+    &_disabled {
+      background: url('../img/arrow-disabled.svg') center no-repeat;
+    }
+  }
+
+}

@@ -1,15 +1,14 @@
 import './index.html';
 import './index.scss';
 import { router } from './modules/router';
-import { mainPage } from './modules/mainPage/mainPage';
-import { mainManPage } from './modules/mainPage/mainManPage';
-import { mainWomanPage } from './modules/mainPage/mainWomanPage';
+import { mainPage } from './modules/mainPage';
 import { renderHeader } from './modules/render/renderHeader';
 import { renderFooter } from './modules/render/renderFooter';
 import { getData } from './modules/getData';
 import { API_URL, DATA } from './modules/const';
 import { createCssColors } from './modules/createCssColors';
 import { createElement } from './modules/createElement';
+import { categoryPage } from './modules/categoryPage';
 
 const init = async () => {
 
@@ -28,11 +27,11 @@ const init = async () => {
     });
 
     router.on('women', () => {
-      mainWomanPage();
+      mainPage('women');
     });
 
     router.on('men', () => {
-      mainManPage();
+      mainPage('men');
     });
 
     router.on('search', (data) => {
@@ -40,11 +39,7 @@ const init = async () => {
       
     });
 
-    router.on('/:gender/:category', (routerData) => {
-      const { gender, category} = routerData.data;
-      const params = { gender, category};
-      
-    });
+    router.on('/:gender/:category', categoryPage);
 
     /*setTimeout( () => {
       router.navigate('men');

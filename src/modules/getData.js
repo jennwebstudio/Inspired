@@ -9,8 +9,7 @@ export const getData = async (urlApi, param, cbError = () => {}) => {
     }
 
     const response = await fetch(url);
-    console.log('response: ', response);
-
+    
     const data = await response.json();
 
     if (!response.ok) {
