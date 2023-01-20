@@ -1,5 +1,5 @@
-import { createElement } from "../createElement";
-import { DATA } from "../const";
+import { createElement } from "../utils/createElement";
+import { DATA, footer } from "../const";
 
 export const vkLink = createElement('a',
     {
@@ -103,7 +103,7 @@ const createFooterCategory = () => {
 };
 
 export const renderFooter = () => {
-  const footer = document.querySelector('.footer');
+  
 
   footer.textContent = '';
 
