@@ -14,7 +14,7 @@ export const renderPagination = (wrapperPagination, page, pages, count) => {
     }
   );
   const isNotStart = (page - Math.floor(count / 2)) > 1;
-  const isEnd = (page + Math.floor(count / 2)) > pages;
+  const isEnd = (page + Math.floor(count / 2)) >= pages;
 
   if (count > pages) {
     count = pages;
@@ -53,10 +53,13 @@ export const renderPagination = (wrapperPagination, page, pages, count) => {
       {
         className: `pagination__arrow pagination__arrow_start ${!isNotStart ? 'pagination__arrow_disabled' : ''}`,
         href: getUrl({page: 1}),
+        tabIndex: !isNotStart ? '-1' : '0',
         ariaLabel: 'В начало'
       },
       {
-        parent: wrapperPagination
+        cb(link) {
+          wrapperPagination.prepend(link);
+        }
       }
     );
 
@@ -64,6 +67,7 @@ export const renderPagination = (wrapperPagination, page, pages, count) => {
       {
         className: `pagination__arrow pagination__arrow_end ${isEnd ? 'pagination__arrow_disabled' : ''}`,
         href: getUrl({page: pages}),
+        tabIndex: isEnd ? '-1' : '0',
         ariaLabel: 'В конец'
       },
       {

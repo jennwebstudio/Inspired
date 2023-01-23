@@ -70,6 +70,7 @@
 
     &_disabled {
       background: url('../img/arrow-disabled.svg') center no-repeat;
+      pointer-events: none;
     }
   }
 

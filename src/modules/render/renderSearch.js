@@ -7,9 +7,6 @@ export const search = createElement('div',
   }
 );
 
-export const searchToggle = () => {
-  search.classList.toggle('search_show');
-}
 
 const container = createElement('div',
   {
@@ -52,3 +49,13 @@ createElement('button',
     parent: form
   }
 );
+
+export const searchToggle = () => {
+  if (search.classList.contains('search_show')) {
+    search.classList.remove('search_show');
+    form.reset();
+  } else {
+    search.classList.add('search_show');
+  }
+  
+};
