@@ -1,10 +1,10 @@
 import { createElement } from "../utils/createElement";
 import { countController } from "../controllers/countController";
 
-export const renderCount = () => {
+export const renderCount = (count, className, returnCount = () => {}) => {
   const control = createElement('div',
     {
-      className: 'card__count count'
+      className: `${className} count`
     }
   );
 
@@ -22,7 +22,7 @@ export const renderCount = () => {
   const number = createElement('span',
     {
       className: 'count__item count__number',
-      textContent: '1'
+      textContent: count
     },
     {
       parent: control
@@ -44,14 +44,14 @@ export const renderCount = () => {
     {
       name: 'count',
       type: 'hidden',
-      value: '1'
+      value: count
     },
     {
       parent: control
     }
   );
 
-  countController(minus, number, plus, input);
+  countController(minus, number, plus, input, returnCount);
 
   return control;
 };
