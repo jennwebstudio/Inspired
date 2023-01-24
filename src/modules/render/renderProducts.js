@@ -4,9 +4,9 @@ import { createElement } from "../utils/createElement";
 import { renderPagination } from "./renderPagination";
 import { getFavorite } from "../controllers/favoriteController";
 
-export const renderProducts = async (title, params) => {
+export const renderProducts = async ({title, params, render}) => {
 
-
+  if (!render) { return;}
   products.textContent = '';
 
   const data = await getData(`${API_URL}/api/goods`, params);

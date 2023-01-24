@@ -12,6 +12,7 @@ import { categoryPageController } from './modules/controllers/categoryPageContro
 import { searchPageController } from './modules/controllers/searchController';
 import { favoriteController } from './modules/controllers/favoriteController';
 import { cardController } from './modules/controllers/cardController';
+import { cartController } from './modules/controllers/cartController';
 
 const init = async () => {
 
@@ -38,10 +39,14 @@ const init = async () => {
     });
 
     router.on('search', searchPageController);
+
     router.on('favorite', favoriteController);
 
     router.on('/:gender/:category', categoryPageController);
+
     router.on('/product/:id', cardController);
+    
+    router.on('cart', cartController);
 
   } catch(e) {
       createElement('h2',
