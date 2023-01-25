@@ -5,8 +5,9 @@ import { getData } from "../getData";
 import { API_URL } from "../const";
 import { renderCount } from "./renderCount";
 import { removeCart, addProductCart } from "../controllers/cartController";
+import { calcTotalPrice } from "../controllers/cartController";
 
-export const renderCart = ({render}) => {
+export const renderCart = ({render, cartGoodsStore}) => {
   cart.textContent = '';
 
   if (!render) { return;}
@@ -30,8 +31,8 @@ export const renderCart = ({render}) => {
     }
   );
 
-  getCart().forEach(async product => {
-    const data = await getData(`${API_URL}/api/goods/${product.id}`);
+  getCart().forEach(product => {
+    const data = cartGoodsStore.getProduct(product.id);
     
     const li = createElement('li',
       {
@@ -94,6 +95,7 @@ export const renderCart = ({render}) => {
             const isRemove = removeCart(product);
             if (isRemove) {
               li.remove();
+              calcTotalPrice.update();
             }
           });
         }
@@ -103,7 +105,7 @@ export const renderCart = ({render}) => {
     const countBlock = renderCount(product.count, 'item__count', count => {
       product.count = count;
       addProductCart(product, true);
-
+      calcTotalPrice.update();
     });
     
 
@@ -123,25 +125,20 @@ export const renderCart = ({render}) => {
   createElement('p',
     {
       className: 'cart__total-price',
-      textContent: 'руб 0'
+      textContent: 'руб  '
     },
     {
-      parent: cartTotal
+      parent: cartTotal,
+      append: createElement('span',
+        {},
+        {
+          cb(elem) {
+            calcTotalPrice.update();
+            calcTotalPrice.writeTotal(elem);
+          }
+        }
+      ),
     }
   );
 
 };
-
-
-/*
- <button class="item__del" aria-label="Удалить товар из корзины"></button>
-       
-             <div class="count item__count">
-            <button class="count__item count__minus">-</button>
-            <span class="count__item count__number">1</span>
-            <button class="count__item count__plus">+</button>
-            <input type="hidden" name="count" value="1">
-          </div>
-    
-
-*/

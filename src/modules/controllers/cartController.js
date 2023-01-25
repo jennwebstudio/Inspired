@@ -1,9 +1,52 @@
+import { API_URL } from "../const";
 import { renderNavigation } from "../render/renderNavigation";
 import { renderHero } from "../render/renderHero";
 import { renderCard } from "../render/renderCard";
 import { renderProducts } from "../render/renderProducts";
 import { renderCart } from "../render/renderCart";
 import { renderOrder } from "../render/renderOrder";
+import { getData } from "../getData";
+
+ export const cartGoodsStore = {
+  goods: [],
+  _add(product) {
+    if (!this.goods.some(item => item.id === product.id)) {
+      this.goods.push(product);
+    }
+  },
+  add(goods) {
+    if (Array.isArray(goods)) {
+      goods.forEach(product => {
+        this._add(product);
+      });
+    } else {
+      this._add(goods);
+    }
+  },
+  getProduct(id) {
+    return this.goods.find(item => item.id === id);
+  }
+};
+
+export const calcTotalPrice = {
+  elemTotalPrice: null,
+  elemCount: null,
+  update() {
+    const cartGoods = getCart();
+    this.count = cartGoods.length;
+    this.totalPrice = cartGoods.reduce((sum, item) => {
+      const product = cartGoodsStore.getProduct(item.id);
+      return product.price * item.count + sum;
+    }, 0);
+    this.writeTotal();
+  },
+  writeTotal(elem = this.elemTotalPrice) {
+    if (elem) {
+      this.elemTotalPrice = elem;
+      elem.textContent = this.totalPrice;
+    }
+  }
+};
 
 export const getCart = () => JSON.parse(localStorage.getItem('cart') || '[]');
 
@@ -46,12 +89,23 @@ export const removeCart = (product) => {
 
 };
 
+export const clearCart = () => {
+  localStorage.removeItem('cart');
+};
 
-export const cartController = () => {
+export const cartController = async () => {
+
+  const idList = getCart().map(item => item.id);
+  
+  const data = await getData(`${API_URL}/api/goods?list=${[idList]}&count=all`);
+  console.log('data: ', data);
+  
+  cartGoodsStore.add(data);
+
   renderNavigation({render: false});
   renderHero({render: false});
   renderCard({render: false});
   renderProducts({render: false});
-  renderCart({render: true});
+  renderCart({render: true, cartGoodsStore});
   renderOrder({render: true});
 };

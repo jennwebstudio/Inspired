@@ -27,11 +27,13 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 36px;
+    padding-bottom: 80px;
 
     @include mobile {
       grid-template-columns: 1fr;
       padding-top: 16px;
       gap: 0;
+      padding-bottom: 40px;
     }
   }
 
@@ -40,6 +42,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px 20px;
+    border: none;
 
     @include mobile {
       grid-template-columns: 1fr;
@@ -66,6 +69,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+    border: none;
 
     @include mobile {
       font-size: 12px;

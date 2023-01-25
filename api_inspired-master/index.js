@@ -23,9 +23,10 @@ const drainJson = (req) =>
   });
 
 const createOrder = (data) => {
+  if (!data.order.length) throw new ApiError(500, { message: "Order is empty" });
+
   data.id =
-    Math.random().toString(10).substring(2, 8) +
-    Date.now().toString(10).substring(9);
+    Math.random().toString(10).substring(2, 5)
   data.createdAt = new Date().toGMTString();
   orders.push(data);
   writeFile(ORDER_FILE, JSON.stringify(orders), (err) => {
@@ -133,6 +134,9 @@ const getGoodsList = (params) => {
   if (params.list) {
     const list = params.list.trim().toLowerCase();
     data = db.goods.filter((item) => list.includes(item.id)).reverse();
+  }
+  if (params.count === 'all') {
+    return data;
   }
 
   return pagination(data, page, paginationCount);
