@@ -1,7 +1,7 @@
 
 export const COUNT_PAGINATION = 5;
 export const DATA = {};
-export const API_URL = 'http://localhost:8024';
+export const API_URL = 'https://sunny-axiomatic-club.glitch.me/';
 export const TITLE = {
   women: {
     title: 'Новая коллекция Бюстгальтер-балконет',
