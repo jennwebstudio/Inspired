@@ -1,40 +1,41 @@
-import { order, API_URL } from "../const";
-import { createElement} from "../utils/createElement";
-import { calcTotalPrice, getCart} from "../controllers/cartController";
-import { sendOrder } from "../controllers/orderController";
-import { cartGoodsStore } from "../controllers/cartController";
-import { router } from "../utils/router";
-import { clearCart } from "../controllers/cartController";
+import { API_URL, order } from '../const';
+import { calcTotalPrice, cartGoodsStore, clearCart, getCart } from '../controllers/cartController';
+import { sendOrder } from '../controllers/orderController';
+import { createElement } from '../utils/createElement';
+import { router } from '../utils/router';
 
 const showOrderInfo = (data) => {
-  const modal = createElement('div',
+  const modal = createElement(
+    'div',
     {
-      className: 'modal'
+      className: 'modal',
     },
     {
       parent: document.body,
       cb(el) {
-        el.addEventListener('click', (e) => {
+        el.addEventListener('click', e => {
           if (e.target === el) {
             el.remove();
-            
             router.navigate('/');
-          }
-        });
+          }          
+        })
       }
     }
   );
 
-  const modalBody = createElement('div',
+  const modalBody = createElement(
+    'div',
     {
       className: 'modal__body'
     },
     {
-      parent: modal
+      parent: modal,
     }
   );
 
-  modalBody.insertAdjacentHTML('beforeend', `
+  modalBody.insertAdjacentHTML(
+    'beforeend',
+    `
     <h2 class="modal__title">Заказ оформлен №${data.id}</h2>
     <p class="modal__description modal__description_thank">Спасибо за выбор нашего магазина!</p>
     <p class="modal__description">Здесь вы можете посмотреть все детали вашего заказа.</p>
@@ -50,7 +51,7 @@ const showOrderInfo = (data) => {
           <span class="customer__item-title">Адрес доставки</span>
           <span class="customer__item-data">${data.address}</span>
         </li>
-      `}     
+      `}
 
       <li class="customer__item">
         <span class="customer__item-title">Телефон</span>
@@ -62,28 +63,31 @@ const showOrderInfo = (data) => {
           <span class="customer__item-title">E-mail</span>
           <span class="customer__item-data">${data.email}</span>
         </li>
-      `}     
+      `}
 
       <li class="customer__item">
         <span class="customer__item-title">Способ получения</span>
         <span class="customer__item-data">${
           {
-          self: 'Самовывоз',
-          delivery: 'Доставка'
+            self: 'Самовывоз',
+            delivery: 'Доставка'
           }[data.delivery]
         }</span>
       </li>
     </ul>
-  `);
+    `
+  );
 
-  const goodsList = createElement('ul',
+  const goodsList = createElement(
+    'ul',
     {
-      className: 'modal__goods goods-list'
+      className: 'modal__goods goods-list',
     },
     {
       parent: modalBody,
       appends: [...data.order.map(item => {
-        const goodsListItem = createElement('li',
+        const goodsListItem = createElement(
+          'li',
           {
             className: 'goods-list__item'
           }
@@ -91,18 +95,20 @@ const showOrderInfo = (data) => {
 
         const product = cartGoodsStore.getProduct(item.id);
 
-        createElement('img',
+        createElement(
+          'img',
           {
             className: 'goods-list__img',
             src: `${API_URL}/${product.pic}`,
-            alt: product.title
+            alt: product.title,
           },
           {
             parent: goodsListItem
           }
         );
 
-        createElement('p',
+        createElement(
+          'p',
           {
             className: 'goods-list__count',
             textContent: `X${item.count}`
@@ -112,40 +118,44 @@ const showOrderInfo = (data) => {
           }
         );
 
+
         return goodsListItem;
-      })]
-    }
+      })],
+    },
   );
 
-  const cartTotal = createElement('div',
+  const cartTotal = createElement(
+    'div',
     {
       className: 'modal__total',
       innerHTML: '<p class="modal__total-title">Итого:</p>'
     },
     {
-      parent: modalBody
+      parent: modalBody,
     }
   );
 
-  createElement('p',
+  createElement(
+    'p',
     {
-      className: 'modal__total-price',
-      textContent: 'руб  '
+      className:'modal__total-price',
+      textContent: 'руб '
     },
     {
       parent: cartTotal,
-      append: createElement('span',
-        {},
-        {
-          cb(elem) {
-            calcTotalPrice.writeTotal(elem);
-          }
+      append: createElement('span', 
+      {},
+      {
+        cb(elem) {
+          calcTotalPrice.writeTotal(elem);
         }
+      }
       )
     }
   );
 
-  createElement('button',
+  createElement(
+    'button',
     {
       className: 'modal__close',
       innerHTML: `
@@ -153,27 +163,31 @@ const showOrderInfo = (data) => {
           <path d="M16 8L8 16" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
           <path d="M16 16L8 8" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
         </svg>
-      `
+      `,
     },
     {
       parent: modalBody,
-      cb(btn) {
-        btn.addEventListener('click', () => {
+      cb(el) {
+        el.addEventListener('click', () => {
           modal.remove();
           router.navigate('/');
-        });
+        })
       }
     }
-  );
+  )
+
   clearCart();
 };
 
 export const renderOrder = ({render}) => {
   order.textContent = '';
 
-  if (!render) { return;}
+  if (!render) {
+    return;
+  }
 
-  const container = createElement('div',
+  const container = createElement(
+    'div',
     {
       className: 'container',
       innerHTML: '<h2 class="order__title">Оформление заказа</h2>'
@@ -184,42 +198,42 @@ export const renderOrder = ({render}) => {
   );
 
   const orderForm = createElement('form',
-    {
-      className: 'order__form'
-    },
-    {
-      parent: container,
-      cb(form) {
-        form.addEventListener('submit', (e) => { // функция обработки submit
-          e.preventDefault();
-          const formData = new FormData(form);
-          const data = Object.fromEntries(formData);
-          data.order = getCart();
+  {
+    className: 'order__form',
+  }, {
+    parent: container,
+    cb(form) {
+      form.addEventListener('submit', e => {
+        e.preventDefault();
 
-          if (data.order.length) {
-            sendOrder(data)
-              .then(dataOrder => {
-                showOrderInfo(dataOrder);
-              
-              });
-          } else {
-            
-          }
-        });
-      }
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData);
+        data.order = getCart();
+
+        if (data.order.length) {
+          sendOrder(data)
+            .then(dataOrder => {
+              showOrderInfo(dataOrder);
+            });
+        } else {
+
+        }
+        
+
+
+      })
     }
-  );
+  });
 
-  orderForm.insertAdjacentHTML('beforeend',
-  `
+  orderForm.insertAdjacentHTML('beforeend', `
     <fieldset class="order__personal">
       <label class="order__label">
         <input class="order__input" type="text" placeholder="ФИО" name="fio" required>
-      </label>
+      </label>            
       
       <label class="order__label">
         <input class="order__input" type="text" placeholder="Адрес доставки" name="address">
-      </label>
+      </label>            
       
       <label class="order__label">
         <input class="order__input" type="text" placeholder="Телефон" name="phone" required>
@@ -229,32 +243,22 @@ export const renderOrder = ({render}) => {
         <input class="order__input" type="text" placeholder="E-mail" name="email">
       </label>
     </fieldset>
-      
+
     <fieldset class="order__radio-list">
       <label class="order__radio radio">
         <input class="radio__input" type="radio" name="delivery" value="delivery" required>
         <span class="radio__text">Доставка</span>
       </label>
-      
+
       <label class="order__radio radio">
         <input class="radio__input" type="radio" name="delivery" value="self" required>
         <span class="radio__text">Самовывоз</span>
       </label>
     </fieldset>
-      
+
     <button class="order__submit main-button" type="submit">Оформить</button>
+
   `);
 
-};
+}
 
-
-/*
-          <div class="container">
-            <h2 class="order__title">Оформление заказа</h2>
-      
-            <form class="order__form">
-              
-      
-            </form>
-          </div>
-*/
